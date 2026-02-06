@@ -113,7 +113,11 @@
             Edit: (p) => <Icon path={<><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></>} {...p} />,
             Trash: (p) => <Icon path={<><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></>} {...p} />,
             Plus: (p) => <Icon path={<><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>} {...p} />,
-            Image: (p) => <Icon path={<><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></>} {...p} />
+            Image: (p) => <Icon path={<><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></>} {...p} />,
+            Twitter: (p) => <Icon path={<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-12.7 12.5S.2 5.3 4.1 3.2C5.3 2.6 7 2 7 2s-.6 2.5-3 4c3.4-1.1 7.2.2 7.2.2-1.2-2.3 0-4.6 2.7-5.5 2.7-.8 5.6.6 5.6.6s.7-1.1 2.3-1.7c0 0-.6 2-2 3 .9-.2 1.8-.4 1.8-.4z"/>} {...p} />,
+            Facebook: (p) => <Icon path={<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>} {...p} />,
+            Linkedin: (p) => <Icon path={<><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></>} {...p} />,
+            Bookmark: (p) => <Icon path={<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>} {...p} />
         };
 
         const SITE_CONFIG = {
@@ -121,6 +125,94 @@
             description: "Journalism that matters.",
             nav: ["Politics", "World", "Business", "Tech", "Culture", "Opinion"]
         };
+
+        // --- ORIGINAL STATIC DATA (Restored) ---
+        const STATIC_BREAKING_NEWS = [
+            { id: 's1', text: "Global markets rally as inflation data shows unexpected cooling" },
+            { id: 's2', text: "SpaceX successfully launches next-gen satellite constellation" },
+            { id: 's3', text: "UN Summit reaches historic agreement on ocean conservation" }
+        ];
+
+        const STATIC_ARTICLES = [
+            {
+                id: 1,
+                title: "The Silent Crisis: Groundwater Depletion in Major Cities",
+                excerpt: "New satellite data reveals alarming rates of aquifer drainage in the world's ten most populous metropolises, prompting urgent calls for reform.",
+                content: `
+                <p class="lead text-xl mb-6">Underneath our feet, a crisis is unfolding that remains largely invisible to the naked eye. While the world focuses on rising sea levels, fresh water sources deep underground are vanishing at an unprecedented rate.</p>
+                
+                <h3 class="text-2xl font-serif font-bold mb-4 mt-8">The Data Speaks</h3>
+                <p class="mb-6">Recent data from the GRACE-FO satellite mission indicates that 21 of the world's 37 largest aquifers have passed their sustainability tipping points. This isn't just a problem for arid regions; cities like London, Tokyo, and New York are facing their own subterranean reckoning.</p>
+                
+                <p class="mb-6">"We are essentially mining water," says Dr. Sarah Al-Fayed, lead hydrologist at the Global Water Institute. "Unlike rivers, which replenish seasonally, these deep aquifers can take thousands of years to recharge. We are drinking our children's heritage."</p>
+
+                <h3 class="text-2xl font-serif font-bold mb-4 mt-8">Urban Planning Reimagined</h3>
+                <p class="mb-6">The solution requires a radical rethinking of urban architecture. 'Sponge cities'—a concept pioneered in China—are gaining traction globally. These cities use permeable pavement, green roofs, and urban wetlands to capture rainwater rather than funneling it into storm drains.</p>
+                
+                <p class="mb-6">In Berlin, new legislation requires all new developments to be 'water neutral', meaning they must capture as much water as they consume. It is a bold step, but one that experts say is necessary to avert a looming catastrophe.</p>
+                `,
+                author: "Elena Fisher",
+                role: "Senior Environmental Correspondent",
+                date: "Feb 12, 2024",
+                readTime: "8 min read",
+                category: "World",
+                image: "https://images.unsplash.com/photo-1518005052357-e984334cb035?auto=format&fit=crop&q=80&w=1200",
+                authorImage: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100",
+                featured: true
+            },
+            {
+                id: 2,
+                title: "Silicon Valley's New Bet: The AI Hardware Wars",
+                excerpt: "Software was just the beginning. The race is now on to build the physical infrastructure that will power the next generation of intelligence.",
+                content: "Full article content would go here...",
+                author: "Marcus Chen",
+                role: "Tech Editor",
+                date: "Feb 11, 2024",
+                readTime: "5 min read",
+                category: "Tech",
+                image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
+                featured: false
+            },
+            {
+                id: 3,
+                title: "Minimalism is Dead: The Rise of Maximalist Interiors",
+                excerpt: "After a decade of beige and grey, interior designers are embracing color, texture, and organized chaos once again.",
+                content: "Full article content would go here...",
+                author: "Sarah Jenkins",
+                role: "Culture Writer",
+                date: "Feb 10, 2024",
+                readTime: "4 min read",
+                category: "Culture",
+                image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=800",
+                featured: false
+            },
+            {
+                id: 4,
+                title: "The Economics of Nostalgia",
+                excerpt: "Why brands are resurrecting dead products and how 'memory marketing' became a billion-dollar industry.",
+                content: "Full article content would go here...",
+                author: "David Ross",
+                role: "Business Analyst",
+                date: "Feb 09, 2024",
+                readTime: "6 min read",
+                category: "Business",
+                image: "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&q=80&w=800",
+                featured: false
+            },
+            {
+                id: 5,
+                title: "Opinion: Democracy in the Age of Algorithms",
+                excerpt: "When our public square is curated by black-box code, can we truly claim to be self-governing?",
+                content: "Full article content would go here...",
+                author: "Dr. Alistair Vance",
+                role: "Guest Contributor",
+                date: "Feb 08, 2024",
+                readTime: "10 min read",
+                category: "Opinion",
+                image: "https://images.unsplash.com/photo-1540910419868-4749459ca6c8?auto=format&fit=crop&q=80&w=800",
+                featured: false
+            }
+        ];
 
         // --- HELPER FUNCTIONS ---
         // Determines Firestore path based on environment (Preview vs Production)
@@ -131,9 +223,12 @@
             return `artifacts/${fb.appId}/public/data/${collectionName}`;
         };
 
-        const formatDate = (timestamp) => {
-            if (!timestamp) return 'Just now';
-            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+        const formatDate = (dateVal) => {
+            if (!dateVal) return 'Just now';
+            // Handle Static String Dates
+            if (typeof dateVal === 'string') return dateVal;
+            // Handle Firestore Timestamp
+            const date = dateVal.toDate ? dateVal.toDate() : new Date(dateVal);
             return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
         };
 
@@ -246,7 +341,7 @@
             useEffect(() => {
                 const { db, collection, onSnapshot, query, orderBy } = window.firebase;
                 
-                // Fetch Articles
+                // Fetch Articles (Only DB articles)
                 const q = query(collection(db, getDBPath('articles')), orderBy('createdAt', 'desc'));
                 const unsubArticles = onSnapshot(q, (snapshot) => {
                     setArticles(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -350,29 +445,35 @@
                     <div className="max-w-5xl mx-auto p-6">
                         {activeTab === 'list' && (
                             <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
-                                <table className="w-full text-left">
-                                    <thead className="bg-gray-50 dark:bg-gray-700">
-                                        <tr>
-                                            <th className="p-4 text-xs font-bold text-gray-500 uppercase">Title</th>
-                                            <th className="p-4 text-xs font-bold text-gray-500 uppercase">Category</th>
-                                            <th className="p-4 text-xs font-bold text-gray-500 uppercase">Date</th>
-                                            <th className="p-4 text-xs font-bold text-gray-500 uppercase text-right">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                                        {articles.map(article => (
-                                            <tr key={article.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                                <td className="p-4 font-medium text-gray-900 dark:text-white">{article.title} {article.featured && <span className="ml-2 text-xs bg-yellow-400 text-black px-1 rounded">FEATURED</span>}</td>
-                                                <td className="p-4 text-gray-500">{article.category}</td>
-                                                <td className="p-4 text-gray-500 text-sm">{formatDate(article.createdAt)}</td>
-                                                <td className="p-4 text-right space-x-2">
-                                                    <button onClick={() => startEdit(article)} className="p-2 text-blue-500 hover:bg-blue-50 rounded-full"><Icons.Edit size={16}/></button>
-                                                    <button onClick={() => handleDelete(article.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-full"><Icons.Trash size={16}/></button>
-                                                </td>
+                                {articles.length === 0 ? (
+                                    <div className="p-8 text-center text-gray-500">
+                                        No dynamic articles yet. The site is currently showing only default static content.
+                                    </div>
+                                ) : (
+                                    <table className="w-full text-left">
+                                        <thead className="bg-gray-50 dark:bg-gray-700">
+                                            <tr>
+                                                <th className="p-4 text-xs font-bold text-gray-500 uppercase">Title</th>
+                                                <th className="p-4 text-xs font-bold text-gray-500 uppercase">Category</th>
+                                                <th className="p-4 text-xs font-bold text-gray-500 uppercase">Date</th>
+                                                <th className="p-4 text-xs font-bold text-gray-500 uppercase text-right">Actions</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                                            {articles.map(article => (
+                                                <tr key={article.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                                    <td className="p-4 font-medium text-gray-900 dark:text-white">{article.title} {article.featured && <span className="ml-2 text-xs bg-yellow-400 text-black px-1 rounded">FEATURED</span>}</td>
+                                                    <td className="p-4 text-gray-500">{article.category}</td>
+                                                    <td className="p-4 text-gray-500 text-sm">{formatDate(article.createdAt)}</td>
+                                                    <td className="p-4 text-right space-x-2">
+                                                        <button onClick={() => startEdit(article)} className="p-2 text-blue-500 hover:bg-blue-50 rounded-full"><Icons.Edit size={16}/></button>
+                                                        <button onClick={() => handleDelete(article.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-full"><Icons.Trash size={16}/></button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                )}
                             </div>
                         )}
 
@@ -522,6 +623,9 @@
                             </nav>
 
                             <div className="flex items-center space-x-4">
+                                <button className="hidden sm:block p-2 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors">
+                                    <Icons.Search size={20} />
+                                </button>
                                 <button onClick={() => toggleTheme(!isDark)} className="p-2 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
                                     {isDark ? <Icons.Sun size={20} /> : <Icons.Moon size={20} />}
                                 </button>
@@ -531,6 +635,22 @@
                             </div>
                         </div>
                     </div>
+
+                    {isMenuOpen && (
+                        <div className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-xl">
+                            <div className="px-4 py-6 space-y-4">
+                                {SITE_CONFIG.nav.map(item => (
+                                    <button 
+                                        key={item}
+                                        onClick={() => { onNav(item); setIsMenuOpen(false); }}
+                                        className="block w-full text-left text-lg font-bold text-gray-900 dark:text-white py-2 border-b border-gray-100 dark:border-gray-800"
+                                    >
+                                        {item}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </header>
             );
         };
@@ -563,7 +683,7 @@
                     <div className="flex items-center space-x-2 mb-3">
                         <span className="text-red-600 text-xs font-bold uppercase tracking-wider">{article.category}</span>
                         <span className="text-gray-300 text-xs">•</span>
-                        <span className="text-gray-400 dark:text-gray-500 text-xs font-medium">{formatDate(article.createdAt)}</span>
+                        <span className="text-gray-400 dark:text-gray-500 text-xs font-medium">{formatDate(article.createdAt || article.date)}</span>
                     </div>
                     <h3 className={`font-serif font-bold text-gray-900 dark:text-white mb-3 group-hover:text-red-600 transition-colors duration-200 leading-snug ${large ? 'text-3xl' : 'text-xl'}`}>{article.title}</h3>
                     <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-3 mb-4 flex-1">{article.excerpt}</p>
@@ -590,7 +710,20 @@
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-black text-gray-900 dark:text-white mb-6 leading-tight">{article.title}</h1>
                             <p className="text-xl md:text-2xl text-gray-500 dark:text-gray-400 font-light leading-relaxed max-w-2xl mx-auto">{article.excerpt}</p>
                             <div className="flex items-center justify-center mt-8 space-x-4 border-t border-b border-gray-100 dark:border-gray-800 py-6">
-                                <div className="text-sm font-bold text-gray-900 dark:text-white uppercase">{article.author}</div>
+                                <div className="flex items-center">
+                                    {article.authorImage && <img src={article.authorImage} alt={article.author} className="w-10 h-10 rounded-full object-cover mr-3 ring-2 ring-gray-100 dark:ring-gray-800" />}
+                                    <div className="text-left">
+                                        <div className="text-sm font-bold text-gray-900 dark:text-white">{article.author}</div>
+                                        {article.role && <div className="text-xs text-gray-500 uppercase tracking-wide">{article.role}</div>}
+                                    </div>
+                                </div>
+                                <div className="h-8 w-px bg-gray-200 dark:bg-gray-700 mx-4" />
+                                <div className="flex space-x-2">
+                                    <button className="p-2 text-gray-400 hover:text-blue-500 transition-colors"><Icons.Twitter size={18} /></button>
+                                    <button className="p-2 text-gray-400 hover:text-blue-700 transition-colors"><Icons.Facebook size={18} /></button>
+                                    <button className="p-2 text-gray-400 hover:text-blue-600 transition-colors"><Icons.Linkedin size={18} /></button>
+                                    <button className="p-2 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"><Icons.Bookmark size={18} /></button>
+                                </div>
                             </div>
                         </header>
                         <div className="w-full h-[50vh] min-h-[400px] mb-12 rounded-xl overflow-hidden shadow-2xl relative">
@@ -611,9 +744,13 @@
             const [user, setUser] = useState(null);
             
             // Data State
-            const [articles, setArticles] = useState([]);
-            const [breakingNews, setBreakingNews] = useState([]);
+            const [dbArticles, setDbArticles] = useState([]);
+            const [dbBreaking, setDbBreaking] = useState([]);
             const [loading, setLoading] = useState(true);
+
+            // Combine Dynamic (First) + Static (Last)
+            const articles = [...dbArticles, ...STATIC_ARTICLES];
+            const breakingNews = [...dbBreaking, ...STATIC_BREAKING_NEWS];
 
             // Setup Auth & Data Listeners
             useEffect(() => {
@@ -638,7 +775,7 @@
                 // Data Listeners
                 const qArticles = query(collection(db, getDBPath('articles')), orderBy('createdAt', 'desc'));
                 const unsubArticles = onSnapshot(qArticles, (snapshot) => {
-                    setArticles(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+                    setDbArticles(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
                     setLoading(false);
                 }, (error) => {
                     console.error("Data fetch error:", error);
@@ -647,7 +784,7 @@
 
                 const qBreaking = query(collection(db, getDBPath('breaking_news')), orderBy('createdAt', 'desc'));
                 const unsubBreaking = onSnapshot(qBreaking, (snap) => {
-                    setBreakingNews(snap.docs.map(d => ({id: d.id, ...d.data()})));
+                    setDbBreaking(snap.docs.map(d => ({id: d.id, ...d.data()})));
                 }, (error) => console.error(error));
 
                 return () => { unsubAuth(); unsubArticles(); unsubBreaking(); };
@@ -721,11 +858,26 @@
                         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12">
                             <div className="col-span-1 md:col-span-2">
                                 <h2 className="text-3xl font-serif font-bold mb-6">Polkhol.</h2>
-                                <p className="text-gray-400 max-w-md">Independent, in-depth journalism for the modern era.</p>
+                                <p className="text-gray-400 max-w-md leading-relaxed">
+                                    Independent, in-depth journalism for the modern era. We cover the stories that shape our world with precision and integrity.
+                                </p>
+                            </div>
+                            <div>
+                                <h4 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-6">Sections</h4>
+                                <ul className="space-y-3">
+                                    {SITE_CONFIG.nav.map(item => (
+                                        <li key={item}><button onClick={() => { setActiveCategory(item); setView('home'); window.scrollTo(0,0); }} className="text-gray-300 hover:text-white transition-colors">{item}</button></li>
+                                    ))}
+                                </ul>
                             </div>
                             <div>
                                 <h4 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-6">Connect</h4>
-                                <ul className="space-y-3 text-gray-300"><li>Twitter</li><li>LinkedIn</li></ul>
+                                <ul className="space-y-3 text-gray-300">
+                                    <li><a href="#" className="hover:text-white">Twitter / X</a></li>
+                                    <li><a href="#" className="hover:text-white">LinkedIn</a></li>
+                                    <li><a href="#" className="hover:text-white">Instagram</a></li>
+                                    <li><a href="#" className="hover:text-white">RSS Feed</a></li>
+                                </ul>
                             </div>
                         </div>
                         <div className="max-w-7xl mx-auto px-4 mt-16 pt-8 border-t border-gray-800 text-center text-gray-600 text-sm">

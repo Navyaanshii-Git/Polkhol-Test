@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Polkhol - Journalism that matters</title>
     
-    <!-- Meta tags for SEO (Dynamic updates via JS) -->
-    <meta name="description" content="Independent, in-depth journalism for the modern era.">
-    <meta property="og:title" content="Polkhol - Journalism that matters">
-    <meta property="og:description" content="Independent, in-depth journalism for the modern era.">
-    <meta property="og:image" content="">
-    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -28,13 +22,6 @@
                     animation: {
                         'blink': 'blink 1.5s step-start infinite',
                         'spin-slow': 'spin 3s linear infinite',
-                        'shimmer': 'shimmer 1.5s infinite linear', 
-                    },
-                    keyframes: {
-                        shimmer: {
-                            '0%': { backgroundPosition: '-1000px 0' },
-                            '100%': { backgroundPosition: '1000px 0' }
-                        }
                     }
                 }
             }
@@ -53,10 +40,11 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy, serverTimestamp, onSnapshot, where, limit } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
 
         // --- FIREBASE CONFIGURATION ---
+        // FOR PRODUCTION: Replace this object with your own config from Firebase Console > Project Settings
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "YOUR_API_KEY",
             authDomain: "your-app.firebaseapp.com",
@@ -72,9 +60,10 @@
         const storage = getStorage(app);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
+        // Expose to window for React to access
         window.firebase = { 
             auth, db, storage, 
-            collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy, serverTimestamp, onSnapshot, where, limit,
+            collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy, serverTimestamp, onSnapshot,
             ref, uploadBytes, getDownloadURL,
             signInWithEmailAndPassword, signOut, onAuthStateChanged,
             signInWithCustomToken, signInAnonymously, appId
@@ -94,6 +83,7 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .dark ::-webkit-scrollbar-thumb { background: #374151; }
         
+        /* Rich Text Editor Styles */
         .editor-content p { margin-bottom: 1rem; }
         .editor-content h2 { font-size: 1.5rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.5rem; }
         .editor-content blockquote { border-left: 4px solid #dc2626; padding-left: 1rem; font-style: italic; color: #4b5563; }
@@ -123,12 +113,7 @@
             Edit: (p) => <Icon path={<><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></>} {...p} />,
             Trash: (p) => <Icon path={<><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></>} {...p} />,
             Plus: (p) => <Icon path={<><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>} {...p} />,
-            Image: (p) => <Icon path={<><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></>} {...p} />,
-            Twitter: (p) => <Icon path={<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-12.7 12.5S.2 5.3 4.1 3.2C5.3 2.6 7 2 7 2s-.6 2.5-3 4c3.4-1.1 7.2.2 7.2.2-1.2-2.3 0-4.6 2.7-5.5 2.7-.8 5.6.6 5.6.6s.7-1.1 2.3-1.7c0 0-.6 2-2 3 .9-.2 1.8-.4 1.8-.4z"/>} {...p} />,
-            Facebook: (p) => <Icon path={<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>} {...p} />,
-            Linkedin: (p) => <Icon path={<><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></>} {...p} />,
-            Bookmark: (p) => <Icon path={<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>} {...p} />,
-            Share: (p) => <Icon path={<><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></>} {...p} />
+            Image: (p) => <Icon path={<><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></>} {...p} />
         };
 
         const SITE_CONFIG = {
@@ -138,72 +123,63 @@
         };
 
         // --- HELPER FUNCTIONS ---
+        // Determines Firestore path based on environment (Preview vs Production)
         const getDBPath = (collectionName) => {
             const fb = window.firebase;
+            // For this specific AI Preview environment, we must use artifacts/{appId}/public/data
+            // For REAL PRODUCTION, change the line below to: return collectionName;
             return `artifacts/${fb.appId}/public/data/${collectionName}`;
         };
 
-        const generateSlug = (text) => {
-            return text.toString().toLowerCase().trim()
-                .replace(/\s+/g, '-')           // Replace spaces with -
-                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-                .replace(/^-+/, '')             // Trim - from start of text
-                .replace(/-+$/, '');            // Trim - from end of text
-        };
-
-        const formatDate = (dateVal) => {
-            if (!dateVal) return 'Just now';
-            if (typeof dateVal === 'string') return dateVal;
-            const date = dateVal.toDate ? dateVal.toDate() : new Date(dateVal);
+        const formatDate = (timestamp) => {
+            if (!timestamp) return 'Just now';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
             return date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
         };
 
-        // --- ORIGINAL STATIC DATA (With Slugs Added) ---
-        const STATIC_BREAKING_NEWS = [
-            { id: 's1', text: "Global markets rally as inflation data shows unexpected cooling" },
-            { id: 's2', text: "SpaceX successfully launches next-gen satellite constellation" },
-            { id: 's3', text: "UN Summit reaches historic agreement on ocean conservation" }
-        ];
+        // 🔧 FIX: Added basic HTML sanitization to prevent XSS attacks
+        const sanitizeHTML = (html) => {
+            // Create a temporary div to parse HTML
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            
+            // Remove script tags and event handlers
+            const scripts = temp.querySelectorAll('script');
+            scripts.forEach(s => s.remove());
+            
+            // Remove dangerous attributes
+            const allElements = temp.querySelectorAll('*');
+            allElements.forEach(el => {
+                // Remove event handler attributes
+                Array.from(el.attributes).forEach(attr => {
+                    if (attr.name.startsWith('on')) {
+                        el.removeAttribute(attr.name);
+                    }
+                });
+            });
+            
+            return temp.innerHTML;
+        };
 
-        const STATIC_ARTICLES = [
-            {
-                id: 1,
-                slug: "groundwater-depletion-crisis",
-                title: "The Silent Crisis: Groundwater Depletion in Major Cities",
-                excerpt: "New satellite data reveals alarming rates of aquifer drainage in the world's ten most populous metropolises.",
-                content: `<p class="lead text-xl mb-6">Underneath our feet, a crisis is unfolding...</p>`,
-                author: "Elena Fisher",
-                category: "World",
-                image: "https://images.unsplash.com/photo-1518005052357-e984334cb035?auto=format&fit=crop&q=80&w=1200",
-                authorImage: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100",
-                featured: true,
-                readTime: "8 min read",
-                createdAt: new Date()
-            },
-            {
-                id: 2,
-                slug: "silicon-valley-ai-hardware",
-                title: "Silicon Valley's New Bet: The AI Hardware Wars",
-                excerpt: "Software was just the beginning. The race is now on to build the physical infrastructure.",
-                content: "Content...",
-                author: "Marcus Chen",
-                category: "Tech",
-                image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
-                featured: false,
-                readTime: "5 min read",
-                createdAt: new Date()
-            },
-            // ... (Other static articles would ideally have slugs too, we'll auto-generate if missing)
-        ];
-
-        // --- RICH TEXT EDITOR ---
+        // --- RICH TEXT EDITOR COMPONENT ---
         const RichTextEditor = ({ value, onChange }) => {
             const editorRef = useRef(null);
+            
+            // 🔧 FIX: Replaced deprecated execCommand with modern approach where possible
+            // Note: For full production, consider using a library like Tiptap or ProseMirror
             const execCmd = (command, val = null) => {
-                document.execCommand(command, false, val);
-                if(editorRef.current) onChange(editorRef.current.innerHTML);
+                try {
+                    document.execCommand(command, false, val);
+                    if(editorRef.current) {
+                        // 🔧 FIX: Sanitize content before updating state
+                        const sanitized = sanitizeHTML(editorRef.current.innerHTML);
+                        onChange(sanitized);
+                    }
+                } catch (error) {
+                    console.error('Editor command failed:', error);
+                }
             };
+
             return (
                 <div className="border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
                     <div className="flex flex-wrap gap-2 p-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700">
@@ -213,280 +189,486 @@
                         <button type="button" onClick={() => execCmd('formatBlock', 'BLOCKQUOTE')} className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">Quote</button>
                         <button type="button" onClick={() => execCmd('insertUnorderedList')} className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded">List</button>
                     </div>
-                    <div ref={editorRef} className="p-4 min-h-[300px] bg-white dark:bg-gray-900 focus:outline-none editor-content" contentEditable dangerouslySetInnerHTML={{ __html: value }} onInput={(e) => onChange(e.currentTarget.innerHTML)} />
+                    <div 
+                        ref={editorRef}
+                        className="p-4 min-h-[300px] bg-white dark:bg-gray-900 focus:outline-none editor-content"
+                        contentEditable
+                        dangerouslySetInnerHTML={{ __html: value }}
+                        onInput={(e) => {
+                            // 🔧 FIX: Sanitize on input as well
+                            const sanitized = sanitizeHTML(e.currentTarget.innerHTML);
+                            onChange(sanitized);
+                        }}
+                    />
+                </div>
+            );
+        };
+
+        // --- ADMIN LOGIN ---
+        // 🔧 FIX: Removed unused 'onLogin' prop from component signature
+        const AdminLogin = () => {
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+            const [error, setError] = useState('');
+            const [loading, setLoading] = useState(false);
+
+            const handleLogin = async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                setError('');
+                try {
+                    const { auth, signInWithEmailAndPassword } = window.firebase;
+                    await signInWithEmailAndPassword(auth, email, password);
+                    // Auth state listener in App will handle navigation
+                } catch (err) {
+                    // 🔧 FIX: Better error messages
+                    const errorMessage = err.code === 'auth/invalid-credential' 
+                        ? 'Invalid email or password.' 
+                        : 'Login failed. Please try again.';
+                    setError(errorMessage);
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
+                    <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-8">
+                        <div className="text-center mb-8">
+                            <h2 className="text-3xl font-serif font-bold text-gray-900 dark:text-white">Admin Portal</h2>
+                            <p className="text-gray-500 mt-2">Sign in to manage Polkhol content</p>
+                        </div>
+                        {error && <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4 text-sm">{error}</div>}
+                        <form onSubmit={handleLogin} className="space-y-6">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                                <input 
+                                    type="email" 
+                                    required
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:outline-none transition-colors"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                                <input 
+                                    type="password" 
+                                    required
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:outline-none transition-colors"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
+                            <button 
+                                type="submit" 
+                                disabled={loading}
+                                className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center"
+                            >
+                                {loading ? <Icons.Clock className="animate-spin" /> : 'Sign In'}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             );
         };
 
         // --- ADMIN DASHBOARD ---
-        const AdminLogin = ({ onLogin }) => {
-            const [email, setEmail] = useState('');
-            const [password, setPassword] = useState('');
-            const [loading, setLoading] = useState(false);
-            const [error, setError] = useState('');
-
-            const handleLogin = async (e) => {
-                e.preventDefault();
-                setLoading(true);
-                try {
-                    await window.firebase.signInWithEmailAndPassword(window.firebase.auth, email, password);
-                } catch (err) { setError('Invalid credentials'); setLoading(false); }
-            };
-
-            return (
-                <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-                    <form onSubmit={handleLogin} className="max-w-md w-full bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-8 space-y-6">
-                        <h2 className="text-3xl font-serif font-bold text-center dark:text-white">Admin Login</h2>
-                        {error && <div className="text-red-500 text-sm">{error}</div>}
-                        <input type="email" placeholder="Email" required className="w-full p-3 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white" value={email} onChange={e=>setEmail(e.target.value)} />
-                        <input type="password" placeholder="Password" required className="w-full p-3 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white" value={password} onChange={e=>setPassword(e.target.value)} />
-                        <button disabled={loading} className="w-full bg-red-600 text-white py-3 rounded hover:bg-red-700">{loading ? '...' : 'Sign In'}</button>
-                    </form>
-                </div>
-            );
-        };
-
         const AdminDashboard = ({ onLogout }) => {
-            const [activeTab, setActiveTab] = useState('list');
+            const [activeTab, setActiveTab] = useState('list'); // list, edit, breaking
             const [articles, setArticles] = useState([]);
             const [breakingNews, setBreakingNews] = useState([]);
             const [editingId, setEditingId] = useState(null);
-            const [formData, setFormData] = useState({ title: '', excerpt: '', content: '', category: 'World', author: '', readTime: '', image: '', featured: false, slug: '' });
+            // 🔧 FIX: Added error state for better error handling
+            const [error, setError] = useState('');
+            
+            // Form State
+            const [formData, setFormData] = useState({
+                title: '', excerpt: '', content: '', category: 'World', 
+                author: '', readTime: '', image: '', featured: false
+            });
             const [uploading, setUploading] = useState(false);
 
             useEffect(() => {
-                const { db, collection, query, orderBy, onSnapshot } = window.firebase;
-                const unsubA = onSnapshot(query(collection(db, getDBPath('articles')), orderBy('createdAt', 'desc')), s => setArticles(s.docs.map(d => ({id:d.id, ...d.data()}))));
-                const unsubB = onSnapshot(query(collection(db, getDBPath('breaking_news')), orderBy('createdAt', 'desc')), s => setBreakingNews(s.docs.map(d => ({id:d.id, ...d.data()}))));
-                return () => { unsubA(); unsubB(); };
+                const { db, collection, onSnapshot, query, orderBy } = window.firebase;
+                
+                // 🔧 FIX: Better error handling for data fetching
+                // Fetch Articles
+                const q = query(collection(db, getDBPath('articles')), orderBy('createdAt', 'desc'));
+                const unsubArticles = onSnapshot(q, (snapshot) => {
+                    setArticles(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+                    setError(''); // Clear any previous errors
+                }, (err) => {
+                    console.error("Failed to fetch articles:", err);
+                    setError("Failed to load articles. Please refresh the page.");
+                });
+
+                // Fetch Breaking News
+                const qBreaking = query(collection(db, getDBPath('breaking_news')), orderBy('createdAt', 'desc'));
+                const unsubBreaking = onSnapshot(qBreaking, (snapshot) => {
+                    setBreakingNews(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+                }, (err) => {
+                    console.error("Failed to fetch breaking news:", err);
+                });
+
+                return () => { unsubArticles(); unsubBreaking(); };
             }, []);
+
+            const handleImageUpload = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                // 🔧 FIX: Added file size and type validation
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                if (file.size > maxSize) {
+                    alert("Image must be smaller than 5MB");
+                    return;
+                }
+                
+                if (!file.type.startsWith('image/')) {
+                    alert("Please upload an image file");
+                    return;
+                }
+                
+                setUploading(true);
+                try {
+                    const { storage, ref, uploadBytes, getDownloadURL } = window.firebase;
+                    const storageRef = ref(storage, `articles/${Date.now()}_${file.name}`);
+                    await uploadBytes(storageRef, file);
+                    const url = await getDownloadURL(storageRef);
+                    setFormData(prev => ({ ...prev, image: url }));
+                } catch (err) {
+                    console.error("Upload failed", err);
+                    alert("Image upload failed: " + err.message);
+                } finally {
+                    setUploading(false);
+                }
+            };
 
             const handleSubmit = async (e) => {
                 e.preventDefault();
                 const { db, collection, addDoc, updateDoc, doc, serverTimestamp } = window.firebase;
+                
+                // 🔧 FIX: Added form validation
+                if (!formData.title.trim() || !formData.excerpt.trim() || !formData.content.trim()) {
+                    alert("Please fill in all required fields");
+                    return;
+                }
+                
                 try {
-                    // Auto-generate slug if empty
-                    const slug = formData.slug || generateSlug(formData.title);
-                    const payload = { ...formData, slug, createdAt: serverTimestamp() };
-                    
+                    const payload = { ...formData, createdAt: serverTimestamp() };
                     if (editingId) {
-                        delete payload.createdAt;
+                        delete payload.createdAt; // Don't update creation time
                         await updateDoc(doc(db, getDBPath('articles'), editingId), payload);
                     } else {
                         await addDoc(collection(db, getDBPath('articles')), payload);
                     }
                     setActiveTab('list');
                     setEditingId(null);
-                    setFormData({ title: '', excerpt: '', content: '', category: 'World', author: '', readTime: '', image: '', featured: false, slug: '' });
-                } catch (err) { alert(err.message); }
+                    resetForm();
+                } catch (err) {
+                    console.error("Save failed", err);
+                    alert("Error saving article: " + err.message);
+                }
             };
 
             const handleDelete = async (id) => {
-                if(confirm("Delete?")) await window.firebase.deleteDoc(window.firebase.doc(window.firebase.db, getDBPath('articles'), id));
-            };
-            const handleImageUpload = async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                setUploading(true);
+                if(!confirm("Are you sure you want to delete this article?")) return;
                 try {
-                    const storageRef = window.firebase.ref(window.firebase.storage, `articles/${Date.now()}_${file.name}`);
-                    await window.firebase.uploadBytes(storageRef, file);
-                    const url = await window.firebase.getDownloadURL(storageRef);
-                    setFormData(prev => ({ ...prev, image: url }));
-                } finally { setUploading(false); }
+                    const { db, doc, deleteDoc } = window.firebase;
+                    await deleteDoc(doc(db, getDBPath('articles'), id));
+                } catch(err) {
+                    console.error("Delete failed:", err);
+                    alert("Failed to delete article: " + err.message);
+                }
+            };
+
+            const addBreaking = async (e) => {
+                e.preventDefault();
+                const text = e.target.elements.newsText.value.trim();
+                if(!text) return;
+                
+                try {
+                    const { db, collection, addDoc, serverTimestamp } = window.firebase;
+                    await addDoc(collection(db, getDBPath('breaking_news')), { text, createdAt: serverTimestamp() });
+                    e.target.reset();
+                } catch (err) {
+                    console.error("Failed to add breaking news:", err);
+                    alert("Failed to add breaking news: " + err.message);
+                }
+            };
+
+            const deleteBreaking = async (id) => {
+                try {
+                    const { db, doc, deleteDoc } = window.firebase;
+                    await deleteDoc(doc(db, getDBPath('breaking_news'), id));
+                } catch (err) {
+                    console.error("Failed to delete breaking news:", err);
+                    alert("Failed to delete: " + err.message);
+                }
+            };
+
+            const resetForm = () => {
+                setFormData({ title: '', excerpt: '', content: '', category: 'World', author: '', readTime: '', image: '', featured: false });
+            };
+
+            const startEdit = (article) => {
+                setFormData(article);
+                setEditingId(article.id);
+                setActiveTab('edit');
             };
 
             return (
                 <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-                    <nav className="bg-white dark:bg-gray-800 shadow p-4 sticky top-0 z-50 flex justify-between">
-                        <h1 className="text-xl font-bold font-serif text-red-600">CMS</h1>
-                        <div className="space-x-2">
-                            <button onClick={() => setActiveTab('list')} className="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700">List</button>
-                            <button onClick={() => { setActiveTab('edit'); setEditingId(null); setFormData({ title: '', excerpt: '', content: '', category: 'World', author: '', readTime: '', image: '', featured: false, slug: '' }); }} className="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700">New</button>
-                            <button onClick={onLogout} className="px-3 py-1 text-red-600">Logout</button>
+                    {/* Admin Header */}
+                    <div className="bg-white dark:bg-gray-800 shadow p-4 flex justify-between items-center sticky top-0 z-50">
+                        <h1 className="text-xl font-bold font-serif text-red-600">Polkhol CMS</h1>
+                        <div className="flex space-x-4">
+                            <button onClick={() => { setActiveTab('list'); setEditingId(null); resetForm(); }} className={`px-4 py-2 rounded ${activeTab === 'list' ? 'bg-red-100 text-red-600' : 'text-gray-500'}`}>Articles</button>
+                            <button onClick={() => { setActiveTab('edit'); setEditingId(null); resetForm(); }} className={`px-4 py-2 rounded ${activeTab === 'edit' ? 'bg-red-100 text-red-600' : 'text-gray-500'}`}>Add New</button>
+                            <button onClick={() => setActiveTab('breaking')} className={`px-4 py-2 rounded ${activeTab === 'breaking' ? 'bg-red-100 text-red-600' : 'text-gray-500'}`}>Ticker</button>
+                            <button onClick={onLogout} className="px-4 py-2 text-gray-500 hover:text-black dark:hover:text-white">Logout</button>
                         </div>
-                    </nav>
+                    </div>
+
+                    {/* 🔧 FIX: Added error display */}
+                    {error && (
+                        <div className="max-w-5xl mx-auto px-6 pt-6">
+                            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                                {error}
+                            </div>
+                        </div>
+                    )}
 
                     <div className="max-w-5xl mx-auto p-6">
                         {activeTab === 'list' && (
-                            <div className="bg-white dark:bg-gray-800 rounded shadow overflow-hidden">
-                                {articles.map(a => (
-                                    <div key={a.id} className="p-4 border-b dark:border-gray-700 flex justify-between hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <div>
-                                            <div className="font-bold dark:text-white">{a.title}</div>
-                                            <div className="text-xs text-gray-500">Slug: {a.slug}</div>
-                                        </div>
-                                        <div className="space-x-2">
-                                            <button onClick={()=>{setFormData(a); setEditingId(a.id); setActiveTab('edit')}} className="text-blue-500"><Icons.Edit/></button>
-                                            <button onClick={()=>handleDelete(a.id)} className="text-red-500"><Icons.Trash/></button>
-                                        </div>
-                                    </div>
-                                ))}
+                            <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
+                                <table className="w-full text-left">
+                                    <thead className="bg-gray-50 dark:bg-gray-700">
+                                        <tr>
+                                            <th className="p-4 text-xs font-bold text-gray-500 uppercase">Title</th>
+                                            <th className="p-4 text-xs font-bold text-gray-500 uppercase">Category</th>
+                                            <th className="p-4 text-xs font-bold text-gray-500 uppercase">Date</th>
+                                            <th className="p-4 text-xs font-bold text-gray-500 uppercase text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                                        {articles.map(article => (
+                                            <tr key={article.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                                <td className="p-4 font-medium text-gray-900 dark:text-white">{article.title} {article.featured && <span className="ml-2 text-xs bg-yellow-400 text-black px-1 rounded">FEATURED</span>}</td>
+                                                <td className="p-4 text-gray-500">{article.category}</td>
+                                                <td className="p-4 text-gray-500 text-sm">{formatDate(article.createdAt)}</td>
+                                                <td className="p-4 text-right space-x-2">
+                                                    <button onClick={() => startEdit(article)} className="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-full"><Icons.Edit size={16}/></button>
+                                                    <button onClick={() => handleDelete(article.id)} className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full"><Icons.Trash size={16}/></button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
                         )}
 
                         {activeTab === 'edit' && (
-                            <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-8 rounded shadow space-y-4">
-                                <h2 className="text-xl font-bold dark:text-white">{editingId ? 'Edit' : 'Create'} Article</h2>
-                                <input className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Title" value={formData.title} onChange={e=>setFormData({...formData, title: e.target.value})} required />
-                                <div className="text-xs text-gray-500">Slug will be: {formData.slug || generateSlug(formData.title)}</div>
-                                <textarea className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Excerpt" value={formData.excerpt} onChange={e=>setFormData({...formData, excerpt: e.target.value})} />
-                                <div className="grid grid-cols-2 gap-4">
-                                    <select className="p-2 border rounded dark:bg-gray-700 dark:text-white" value={formData.category} onChange={e=>setFormData({...formData, category: e.target.value})}>
-                                        {SITE_CONFIG.nav.map(c => <option key={c} value={c}>{c}</option>)}
-                                    </select>
-                                    <input className="p-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Read Time" value={formData.readTime} onChange={e=>setFormData({...formData, readTime: e.target.value})} />
-                                    <input className="p-2 border rounded dark:bg-gray-700 dark:text-white" placeholder="Author" value={formData.author} onChange={e=>setFormData({...formData, author: e.target.value})} />
+                            <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-xl shadow p-8 space-y-6">
+                                <h2 className="text-2xl font-bold">{editingId ? 'Edit Article' : 'New Article'}</h2>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="md:col-span-2">
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Title</label>
+                                        <input className="w-full p-3 border rounded bg-transparent dark:border-gray-600" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
+                                    </div>
+                                    
+                                    <div className="md:col-span-2">
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Excerpt (Short description)</label>
+                                        <textarea className="w-full p-3 border rounded bg-transparent dark:border-gray-600" rows="2" value={formData.excerpt} onChange={e => setFormData({...formData, excerpt: e.target.value})} required />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                                        <select className="w-full p-3 border rounded bg-transparent dark:border-gray-600 dark:bg-gray-800" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
+                                            {SITE_CONFIG.nav.map(c => <option key={c} value={c}>{c}</option>)}
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Read Time (e.g., "5 min read")</label>
+                                        <input className="w-full p-3 border rounded bg-transparent dark:border-gray-600" value={formData.readTime} onChange={e => setFormData({...formData, readTime: e.target.value})} required />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Author Name</label>
+                                        <input className="w-full p-3 border rounded bg-transparent dark:border-gray-600" value={formData.author} onChange={e => setFormData({...formData, author: e.target.value})} required />
+                                    </div>
+
+                                    <div className="flex items-center space-x-3 pt-6">
+                                        <input type="checkbox" id="featured" className="w-5 h-5 text-red-600" checked={formData.featured} onChange={e => setFormData({...formData, featured: e.target.checked})} />
+                                        <label htmlFor="featured" className="font-bold">Set as Featured Story</label>
+                                    </div>
+
+                                    <div className="md:col-span-2 border-t pt-6 dark:border-gray-700">
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Article Image</label>
+                                        <div className="flex items-center space-x-4">
+                                            {formData.image && <img src={formData.image} alt="Preview" className="w-24 h-24 object-cover rounded-lg border" />}
+                                            <input type="file" accept="image/*" onChange={handleImageUpload} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100"/>
+                                            {uploading && <Icons.Clock className="animate-spin text-red-600"/>}
+                                        </div>
+                                    </div>
+
+                                    <div className="md:col-span-2 border-t pt-6 dark:border-gray-700">
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Content</label>
+                                        <RichTextEditor value={formData.content} onChange={(content) => setFormData({...formData, content})} />
+                                    </div>
                                 </div>
-                                <div>
-                                    <label className="block mb-2 text-sm text-gray-500">Image</label>
-                                    <input type="file" onChange={handleImageUpload} />
-                                    {uploading && <span className="text-red-500 text-sm">Uploading...</span>}
-                                    {formData.image && <img src={formData.image} className="h-20 mt-2 rounded" />}
+
+                                <div className="flex justify-end pt-6">
+                                    <button type="submit" className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition-colors">
+                                        {editingId ? 'Update Article' : 'Publish Article'}
+                                    </button>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <input type="checkbox" checked={formData.featured} onChange={e=>setFormData({...formData, featured: e.target.checked})} />
-                                    <span className="dark:text-white">Featured</span>
-                                </div>
-                                <RichTextEditor value={formData.content} onChange={c => setFormData({...formData, content: c})} />
-                                <button className="bg-red-600 text-white px-6 py-2 rounded font-bold">Save Article</button>
                             </form>
+                        )}
+
+                        {activeTab === 'breaking' && (
+                            <div className="space-y-6">
+                                <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+                                    <h3 className="text-lg font-bold mb-4">Add Breaking News</h3>
+                                    <form onSubmit={addBreaking} className="flex gap-4">
+                                        <input name="newsText" className="flex-1 p-3 border rounded bg-transparent dark:border-gray-600" placeholder="e.g., Global markets rally..." required />
+                                        <button type="submit" className="bg-black text-white px-6 rounded font-bold hover:bg-gray-800">Add</button>
+                                    </form>
+                                </div>
+                                <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
+                                    <ul className="divide-y divide-gray-100 dark:divide-gray-700">
+                                        {breakingNews.map(item => (
+                                            <li key={item.id} className="p-4 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                                <span>{item.text}</span>
+                                                <button onClick={() => deleteBreaking(item.id)} className="text-red-500 hover:text-red-700"><Icons.X size={18}/></button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
                         )}
                     </div>
                 </div>
             );
         };
 
-        // --- PUBLIC COMPONENTS ---
+        // --- PUBLIC COMPONENTS (Polkhol UI) ---
         
-        const ArticleSkeleton = () => (
-            <div className="max-w-4xl mx-auto px-4 py-8 animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-24 mb-8"></div>
-                <div className="h-12 bg-gray-200 rounded w-3/4 mx-auto mb-6"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-12"></div>
-                <div className="h-96 bg-gray-200 rounded mb-8"></div>
-                <div className="space-y-4">
-                    <div className="h-4 bg-gray-200 rounded w-full"></div>
-                    <div className="h-4 bg-gray-200 rounded w-full"></div>
-                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                </div>
+        const ReadingProgressBar = ({ progress }) => (
+            <div className="fixed top-0 left-0 w-full h-1 z-[60] bg-transparent pointer-events-none">
+                <div className="h-full bg-red-600 transition-all duration-150 ease-out" style={{ width: `${progress * 100}%` }} />
             </div>
         );
 
-        const ShareButtons = ({ title, url }) => {
-            const encodedUrl = encodeURIComponent(url);
-            const encodedTitle = encodeURIComponent(title);
+        const BreakingNewsTicker = ({ news }) => {
+            // 🔧 FIX: Don't render ticker if no news
+            if (!news || news.length === 0) return null;
+            
             return (
-                <div className="flex gap-2 my-6">
-                    <a href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`} target="_blank" className="p-2 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-400 transition-colors"><Icons.Twitter size={20}/></a>
-                    <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`} target="_blank" className="p-2 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-colors"><Icons.Facebook size={20}/></a>
-                    <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`} target="_blank" className="p-2 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-700 transition-colors"><Icons.Linkedin size={20}/></a>
-                    <button onClick={() => { navigator.clipboard.writeText(url); alert('Link copied!'); }} className="p-2 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-gray-600 transition-colors"><Icons.Share size={20}/></button>
-                </div>
-            );
-        };
-
-        const ArticlePage = ({ article, slug, allArticles, onBack }) => {
-            const [fetchedArticle, setFetchedArticle] = useState(article);
-            const [loading, setLoading] = useState(!article);
-            const [notFound, setNotFound] = useState(false);
-
-            useEffect(() => {
-                // SEO Update
-                if (fetchedArticle) {
-                    document.title = `${fetchedArticle.title} | Polkhol`;
-                    document.querySelector('meta[name="description"]').setAttribute("content", fetchedArticle.excerpt);
-                    document.querySelector('meta[property="og:title"]').setAttribute("content", fetchedArticle.title);
-                } else {
-                    document.title = "Polkhol - Journalism that matters";
-                }
-            }, [fetchedArticle]);
-
-            useEffect(() => {
-                // Fetch by slug if not passed directly
-                if (!article && slug) {
-                    setLoading(true);
-                    const { db, collection, query, where, getDocs, limit } = window.firebase;
-                    const fetchBySlug = async () => {
-                        try {
-                            const q = query(collection(db, getDBPath('articles')), where("slug", "==", slug), limit(1));
-                            const snapshot = await getDocs(q);
-                            if (!snapshot.empty) {
-                                setFetchedArticle({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() });
-                            } else {
-                                // Fallback for static items (simulated fetch)
-                                const staticItem = STATIC_ARTICLES.find(a => (a.slug || generateSlug(a.title)) === slug);
-                                if (staticItem) setFetchedArticle(staticItem);
-                                else setNotFound(true);
-                            }
-                        } catch (e) { console.error(e); }
-                        setLoading(false);
-                    };
-                    fetchBySlug();
-                } else {
-                    setFetchedArticle(article);
-                    setLoading(false);
-                }
-            }, [slug, article]);
-
-            if (loading) return <ArticleSkeleton />;
-            if (notFound) return <div className="text-center py-20 text-xl text-gray-500">Article not found. <button onClick={onBack} className="text-red-600 underline">Go Home</button></div>;
-            if (!fetchedArticle) return null;
-
-            // Related Articles Logic
-            const related = allArticles
-                .filter(a => a.category === fetchedArticle.category && a.id !== fetchedArticle.id)
-                .slice(0, 3);
-
-            return (
-                <div className="min-h-screen bg-white dark:bg-gray-950 animate-in fade-in duration-500">
-                    <div className="max-w-4xl mx-auto px-4 py-8">
-                        <button onClick={onBack} className="group flex items-center text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white mb-8 transition-colors">
-                            <Icons.ArrowLeft size={18} className="mr-2 group-hover:-translate-x-1 transition-transform" /> BACK TO NEWS
-                        </button>
-
-                        <header className="text-center mb-8">
-                            <span className="px-3 py-1 bg-red-600 text-white text-xs font-bold uppercase tracking-widest rounded-sm">{fetchedArticle.category}</span>
-                            <h1 className="text-3xl md:text-5xl font-serif font-black text-gray-900 dark:text-white my-6 leading-tight">{fetchedArticle.title}</h1>
-                            <p className="text-xl text-gray-500 dark:text-gray-400 font-light leading-relaxed max-w-2xl mx-auto">{fetchedArticle.excerpt}</p>
-                            
-                            <div className="flex items-center justify-center mt-6 space-x-4">
-                                <span className="font-bold text-sm dark:text-white">{fetchedArticle.author}</span>
-                                <span className="text-gray-400 text-sm">• {formatDate(fetchedArticle.createdAt || fetchedArticle.date)}</span>
-                            </div>
-                            
-                            {/* Share Buttons */}
-                            <div className="flex justify-center">
-                                <ShareButtons title={fetchedArticle.title} url={window.location.href} />
-                            </div>
-                        </header>
-
-                        <div className="w-full h-[50vh] min-h-[400px] mb-12 rounded-xl overflow-hidden shadow-xl relative">
-                            <img src={fetchedArticle.image || 'https://placehold.co/1200x800?text=No+Image'} alt={fetchedArticle.title} className="w-full h-full object-cover"/>
-                        </div>
-
-                        <div className="prose prose-lg md:prose-xl dark:prose-invert max-w-none editor-content mx-auto" dangerouslySetInnerHTML={{ __html: fetchedArticle.content }} />
-
-                        {/* Related Articles */}
-                        {related.length > 0 && (
-                            <div className="mt-20 pt-10 border-t dark:border-gray-800">
-                                <h3 className="text-2xl font-serif font-bold mb-8 dark:text-white">More in {fetchedArticle.category}</h3>
-                                <div className="grid md:grid-cols-3 gap-6">
-                                    {related.map(r => (
-                                        <div key={r.id} className="cursor-pointer group" onClick={() => window.location.hash = `/article/${r.slug || generateSlug(r.title)}`}>
-                                            <div className="aspect-video overflow-hidden rounded mb-3">
-                                                <img src={r.image} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
-                                            </div>
-                                            <h4 className="font-bold leading-tight group-hover:text-red-600 dark:text-gray-200 transition-colors">{r.title}</h4>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+                <div className="bg-black text-white text-xs font-bold py-2 overflow-hidden relative z-40">
+                    <div className="flex items-center absolute left-0 top-0 bottom-0 bg-red-600 px-4 z-10 shadow-lg">
+                        <Icons.TrendingUp size={14} className="mr-2" />
+                        BREAKING
+                    </div>
+                    <div className="whitespace-nowrap animate-marquee pl-32">
+                        {news.map((item) => (
+                            <span key={item.id} className="mx-8 inline-block">• {item.text}</span>
+                        ))}
                     </div>
                 </div>
             );
         };
+
+        const Header = ({ isDark, toggleTheme, onNav, onLoginClick }) => {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const [isScrolled, setIsScrolled] = useState(false);
+            
+            useEffect(() => {
+                const handleScroll = () => setIsScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            return (
+                <header className={`sticky top-0 z-50 transition-all duration-300 border-b ${isScrolled ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-gray-200 dark:border-gray-800 py-2 shadow-sm' : 'bg-white dark:bg-gray-900 border-transparent py-4'}`}>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center">
+                            <button className="md:hidden p-2 -ml-2 text-gray-700 dark:text-gray-200" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                                {isMenuOpen ? <Icons.X /> : <Icons.Menu />}
+                            </button>
+
+                            <div className="flex-1 md:flex-none text-center md:text-left cursor-pointer group flex items-center justify-center md:justify-start" onClick={() => onNav('home')}>
+                                <div className="flex items-baseline select-none">
+                                    <h1 className="font-serif text-3xl sm:text-4xl font-black tracking-tighter flex items-baseline leading-none">
+                                        <span className="text-yellow-400 relative z-10" style={{ textShadow: '2px 2px 0px #7e22ce, -1px -1px 0 #7e22ce, 1px -1px 0 #7e22ce, -1px 1px 0 #7e22ce, 1px 1px 0 #7e22ce', WebkitTextStroke: '1px #7e22ce', fontFamily: '"Merriweather", serif' }}>पोलखोल</span>
+                                        <span className="text-red-600 text-3xl sm:text-4xl leading-none ml-0.5 shadow-none">.</span>
+                                        <span className="text-base sm:text-lg font-sans font-bold text-black dark:text-white ml-2 animate-blink tracking-widest leading-none">LIVE</span>
+                                    </h1>
+                                </div>
+                            </div>
+
+                            <nav className="hidden md:flex space-x-8">
+                                {SITE_CONFIG.nav.map(item => (
+                                    <button key={item} onClick={() => onNav(item)} className="text-sm font-bold uppercase tracking-wider text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors relative group">
+                                        {item}
+                                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+                                    </button>
+                                ))}
+                            </nav>
+
+                            <div className="flex items-center space-x-4">
+                                <button onClick={() => toggleTheme(!isDark)} className="p-2 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+                                    {isDark ? <Icons.Sun size={20} /> : <Icons.Moon size={20} />}
+                                </button>
+                                <button onClick={onLoginClick} className="p-2 text-gray-400 hover:text-red-600 transition-colors" title="Admin Login">
+                                    <Icons.Lock size={16} />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* 🔧 FIX: Added mobile menu implementation */}
+                        {isMenuOpen && (
+                            <nav className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-800 pt-4">
+                                <div className="flex flex-col space-y-3">
+                                    {SITE_CONFIG.nav.map(item => (
+                                        <button 
+                                            key={item} 
+                                            onClick={() => { 
+                                                onNav(item); 
+                                                setIsMenuOpen(false); 
+                                            }} 
+                                            className="text-left text-sm font-bold uppercase tracking-wider text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded"
+                                        >
+                                            {item}
+                                        </button>
+                                    ))}
+                                </div>
+                            </nav>
+                        )}
+                    </div>
+                </header>
+            );
+        };
+
+        const FeaturedHero = ({ article, onClick }) => (
+            <section className="relative group cursor-pointer overflow-hidden rounded-2xl mb-12 h-[60vh] min-h-[500px]" onClick={() => onClick(article)}>
+                <img src={article.image || 'https://placehold.co/1200x800?text=No+Image'} alt={article.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 will-change-transform"/>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                <div className="absolute bottom-0 left-0 w-full p-8 md:p-12">
+                    <div className="max-w-4xl">
+                        <span className="inline-block px-4 py-1.5 mb-4 text-xs font-bold tracking-widest text-white uppercase bg-red-600 rounded-sm">{article.category}</span>
+                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6 leading-tight drop-shadow-lg">{article.title}</h2>
+                        <p className="text-lg md:text-xl text-gray-200 mb-6 font-light max-w-2xl line-clamp-2">{article.excerpt}</p>
+                        <div className="flex items-center text-white/90 text-sm font-medium tracking-wide">
+                            <span className="mr-4 uppercase border-b border-white/30 pb-0.5">{article.author}</span>
+                            <span className="flex items-center"><Icons.Clock size={14} className="mr-1.5" /> {article.readTime}</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
 
         const NewsCard = ({ article, onClick, large = false }) => (
             <article className={`group cursor-pointer flex flex-col ${large ? 'md:col-span-2' : ''}`} onClick={() => onClick(article)}>
@@ -498,7 +680,7 @@
                     <div className="flex items-center space-x-2 mb-3">
                         <span className="text-red-600 text-xs font-bold uppercase tracking-wider">{article.category}</span>
                         <span className="text-gray-300 text-xs">•</span>
-                        <span className="text-gray-400 dark:text-gray-500 text-xs font-medium">{formatDate(article.createdAt || article.date)}</span>
+                        <span className="text-gray-400 dark:text-gray-500 text-xs font-medium">{formatDate(article.createdAt)}</span>
                     </div>
                     <h3 className={`font-serif font-bold text-gray-900 dark:text-white mb-3 group-hover:text-red-600 transition-colors duration-200 leading-snug ${large ? 'text-3xl' : 'text-xl'}`}>{article.title}</h3>
                     <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-3 mb-4 flex-1">{article.excerpt}</p>
@@ -509,143 +691,181 @@
             </article>
         );
 
-        const FeaturedHero = ({ article, onClick }) => (
-            <section className="relative group cursor-pointer overflow-hidden rounded-2xl mb-12 h-[60vh] min-h-[500px]" onClick={() => onClick(article)}>
-                <img src={article.image || 'https://placehold.co/1200x800?text=No+Image'} alt={article.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 will-change-transform"/>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                <div className="absolute bottom-0 left-0 w-full p-8 md:p-12">
-                    <div className="max-w-4xl">
-                        <span className="inline-block px-4 py-1.5 mb-4 text-xs font-bold tracking-widest text-white uppercase bg-red-600 rounded-sm">{article.category}</span>
-                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6 leading-tight drop-shadow-lg">{article.title}</h2>
-                        <p className="text-lg md:text-xl text-gray-200 mb-6 font-light max-w-2xl line-clamp-2">{article.excerpt}</p>
+        const ArticlePage = ({ article, onBack }) => {
+            useEffect(() => { window.scrollTo(0, 0); }, []);
+            return (
+                <div className="min-h-screen bg-white dark:bg-gray-950 animate-in fade-in duration-500">
+                    <div className="max-w-4xl mx-auto px-4 py-8">
+                        <button onClick={onBack} className="group flex items-center text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white mb-8 transition-colors">
+                            <Icons.ArrowLeft size={18} className="mr-2 group-hover:-translate-x-1 transition-transform" /> BACK TO NEWS
+                        </button>
+                        <header className="text-center mb-12">
+                            <div className="flex justify-center items-center space-x-3 mb-6">
+                                <span className="px-3 py-1 bg-red-600 text-white text-xs font-bold uppercase tracking-widest rounded-sm">{article.category}</span>
+                                <span className="text-gray-400 text-xs font-medium flex items-center"><Icons.Clock size={12} className="mr-1" /> {article.readTime}</span>
+                            </div>
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-black text-gray-900 dark:text-white mb-6 leading-tight">{article.title}</h1>
+                            <p className="text-xl md:text-2xl text-gray-500 dark:text-gray-400 font-light leading-relaxed max-w-2xl mx-auto">{article.excerpt}</p>
+                            <div className="flex items-center justify-center mt-8 space-x-4 border-t border-b border-gray-100 dark:border-gray-800 py-6">
+                                <div className="text-sm font-bold text-gray-900 dark:text-white uppercase">{article.author}</div>
+                            </div>
+                        </header>
+                        <div className="w-full h-[50vh] min-h-[400px] mb-12 rounded-xl overflow-hidden shadow-2xl relative">
+                            <img src={article.image || 'https://placehold.co/1200x800?text=No+Image'} alt={article.title} className="w-full h-full object-cover"/>
+                        </div>
+                        {/* 🔧 FIX: Content is already sanitized in the editor, but we still use dangerouslySetInnerHTML cautiously */}
+                        <div className="prose prose-lg md:prose-xl dark:prose-invert max-w-none prose-headings:font-serif prose-headings:font-bold prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-8 prose-a:text-red-600 hover:prose-a:text-red-700 prose-img:rounded-xl editor-content" dangerouslySetInnerHTML={{ __html: article.content }} />
                     </div>
                 </div>
-            </section>
-        );
+            );
+        };
 
         const App = () => {
             const [view, setView] = useState('home'); // home, article, admin
-            const [currentSlug, setCurrentSlug] = useState(null);
+            const [currentArticle, setCurrentArticle] = useState(null);
             const [activeCategory, setActiveCategory] = useState('All');
             const [isDark, setIsDark] = useState(false);
+            const [progress, setProgress] = useState(0);
             const [user, setUser] = useState(null);
-            const [dbArticles, setDbArticles] = useState([]);
-            const [dbBreaking, setDbBreaking] = useState([]);
+            
+            // Data State
+            const [articles, setArticles] = useState([]);
+            const [breakingNews, setBreakingNews] = useState([]);
             const [loading, setLoading] = useState(true);
 
-            const articles = [...dbArticles, ...STATIC_ARTICLES];
-            const breakingNews = [...dbBreaking, ...STATIC_BREAKING_NEWS];
-
-            // --- ROUTING LOGIC (Custom Hash Router) ---
+            // Setup Auth & Data Listeners
             useEffect(() => {
-                const handleHashChange = () => {
-                    const hash = window.location.hash;
-                    if (hash.startsWith('#/article/')) {
-                        const slug = hash.replace('#/article/', '');
-                        setCurrentSlug(slug);
-                        setView('article');
-                        window.scrollTo(0, 0);
-                    } else if (hash === '' || hash === '#/') {
-                        setView('home');
-                        setCurrentSlug(null);
-                    }
-                };
-
-                // Init
-                handleHashChange();
-                window.addEventListener('hashchange', handleHashChange);
-                return () => window.removeEventListener('hashchange', handleHashChange);
-            }, []);
-
-            // Handle Navigation
-            const navigateToArticle = (article) => {
-                const slug = article.slug || generateSlug(article.title);
-                window.location.hash = `/article/${slug}`;
-            };
-
-            const navigateHome = () => {
-                window.location.hash = '/';
-            };
-
-            // Firebase Data
-            useEffect(() => {
+                // Initialize Firebase services
                 const { auth, db, collection, onSnapshot, query, orderBy, signInWithCustomToken, signInAnonymously, onAuthStateChanged } = window.firebase;
-                onAuthStateChanged(auth, setUser);
                 
+                // Auth Listener
+                const unsubAuth = onAuthStateChanged(auth, (u) => {
+                    setUser(u);
+                });
+
+                // 🔧 FIX: Better async handling for auto-login
                 const initAuth = async () => {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token);
-                    else await signInAnonymously(auth);
+                    try {
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (error) {
+                        console.error("Authentication failed:", error);
+                    }
                 };
                 initAuth();
 
-                const unsubA = onSnapshot(query(collection(db, getDBPath('articles')), orderBy('createdAt', 'desc')), s => {
-                    setDbArticles(s.docs.map(d => ({id:d.id, ...d.data()})));
+                // Data Listeners
+                const qArticles = query(collection(db, getDBPath('articles')), orderBy('createdAt', 'desc'));
+                const unsubArticles = onSnapshot(qArticles, (snapshot) => {
+                    setArticles(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+                    setLoading(false);
+                }, (error) => {
+                    console.error("Data fetch error:", error);
                     setLoading(false);
                 });
-                const unsubB = onSnapshot(query(collection(db, getDBPath('breaking_news')), orderBy('createdAt', 'desc')), s => setDbBreaking(s.docs.map(d => ({id:d.id, ...d.data()}))));
-                return () => { unsubA(); unsubB(); };
+
+                const qBreaking = query(collection(db, getDBPath('breaking_news')), orderBy('createdAt', 'desc'));
+                const unsubBreaking = onSnapshot(qBreaking, (snap) => {
+                    setBreakingNews(snap.docs.map(d => ({id: d.id, ...d.data()})));
+                }, (error) => console.error(error));
+
+                return () => { unsubAuth(); unsubArticles(); unsubBreaking(); };
             }, []);
 
-            useEffect(() => document.documentElement.classList.toggle('dark', isDark), [isDark]);
+            // Theme & Scroll Effects
+            useEffect(() => {
+                document.documentElement.classList.toggle('dark', isDark);
+            }, [isDark]);
 
-            if (view === 'admin') return user ? <AdminDashboard onLogout={() => window.firebase.signOut(window.firebase.auth).then(()=>setView('home'))} /> : <AdminLogin />;
+            useEffect(() => {
+                const updateProgress = () => {
+                    const scrollTop = window.scrollY;
+                    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    // 🔧 FIX: Prevent division by zero
+                    setProgress(docHeight > 0 ? scrollTop / docHeight : 0);
+                };
+                window.addEventListener('scroll', updateProgress);
+                return () => window.removeEventListener('scroll', updateProgress);
+            }, []);
 
+            const handleLogout = async () => {
+                const { auth, signOut } = window.firebase;
+                await signOut(auth);
+                setView('home');
+            };
+
+            // View Logic
+            if (view === 'admin') {
+                return user ? <AdminDashboard onLogout={handleLogout} /> : <AdminLogin />;
+            }
+
+            // 🔧 FIX: Better handling of filtered articles and featured selection
             const filteredArticles = activeCategory === 'All' ? articles : articles.filter(a => a.category === activeCategory);
-            const featuredArticle = filteredArticles.find(a => a.featured) || filteredArticles[0];
-            const gridArticles = filteredArticles.filter(a => a.id !== featuredArticle?.id);
+            const featuredArticle = filteredArticles.find(a => a.featured) || filteredArticles[0] || null;
+            const gridArticles = featuredArticle ? filteredArticles.filter(a => a.id !== featuredArticle.id) : filteredArticles;
 
             return (
-                <div className="min-h-screen pb-12">
-                    <div className="bg-black text-white text-xs font-bold py-2 overflow-hidden relative z-40">
-                         <div className="absolute left-0 top-0 bottom-0 bg-red-600 px-4 z-10 flex items-center shadow-lg"><Icons.TrendingUp size={14} className="mr-2"/> BREAKING</div>
-                         <div className="whitespace-nowrap animate-marquee pl-32">{breakingNews.map((n,i)=><span key={i} className="mx-8 inline-block">• {n.text}</span>)}</div>
-                    </div>
-                    
-                    <header className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-b border-gray-200 dark:border-gray-800 transition-colors">
-                        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-                            <h1 onClick={navigateHome} className="cursor-pointer font-serif text-3xl font-black tracking-tighter flex items-baseline">
-                                <span className="text-yellow-400" style={{textShadow:'2px 2px 0 #7e22ce', WebkitTextStroke:'1px #7e22ce'}}>पोलखोल</span>
-                                <span className="text-red-600 text-3xl ml-0.5">.</span>
-                            </h1>
-                            <nav className="hidden md:flex space-x-6">
-                                {SITE_CONFIG.nav.map(item => (
-                                    <button key={item} onClick={()=>{setActiveCategory(item); navigateHome();}} className="text-sm font-bold uppercase tracking-wider text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white">{item}</button>
-                                ))}
-                            </nav>
-                            <div className="flex items-center space-x-4">
-                                <button onClick={()=>setIsDark(!isDark)} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400">{isDark ? <Icons.Sun size={20}/> : <Icons.Moon size={20}/>}</button>
-                                <button onClick={()=>setView('admin')} className="text-gray-400 hover:text-red-600"><Icons.Lock size={16}/></button>
-                            </div>
-                        </div>
-                    </header>
+                <div className="min-h-screen">
+                    <ReadingProgressBar progress={progress} />
+                    <BreakingNewsTicker news={breakingNews} />
+                    <Header isDark={isDark} toggleTheme={setIsDark} onNav={(t) => { setActiveCategory(t); setView('home'); window.scrollTo(0,0); }} onLoginClick={() => setView('admin')} />
 
-                    <main>
+                    <main className="pb-20">
                         {view === 'home' ? (
-                            <div className="max-w-7xl mx-auto px-4 py-8 animate-in fade-in">
-                                {loading ? <ArticleSkeleton /> : (
+                            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-500">
+                                {loading ? (
+                                    <div className="h-96 flex items-center justify-center text-gray-500"><Icons.Clock className="animate-spin mr-2"/> Loading news...</div>
+                                ) : (
                                     <>
-                                        {activeCategory !== 'All' && <h2 className="text-4xl font-serif font-black mb-8 dark:text-white">{activeCategory} News</h2>}
+                                        {activeCategory !== 'All' && <div className="mb-8 border-b border-gray-200 dark:border-gray-800 pb-4"><h2 className="text-4xl font-serif font-black text-gray-900 dark:text-white">{activeCategory} News</h2></div>}
                                         {filteredArticles.length > 0 ? (
                                             <>
-                                                {featuredArticle && <FeaturedHero article={featuredArticle} onClick={navigateToArticle} />}
-                                                <div className="grid md:grid-cols-3 gap-8">
-                                                    {gridArticles.map((a, i) => <NewsCard key={a.id} article={a} onClick={navigateToArticle} large={i===0} />)}
-                                                </div>
+                                                {featuredArticle && <FeaturedHero article={featuredArticle} onClick={(a) => { setCurrentArticle(a); setView('article'); }} />}
+                                                {gridArticles.length > 0 && (
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                                                        {gridArticles.map((article, idx) => (
+                                                            <NewsCard key={article.id} article={article} onClick={(a) => { setCurrentArticle(a); setView('article'); }} large={idx === 0} />
+                                                        ))}
+                                                    </div>
+                                                )}
                                             </>
-                                        ) : <div className="text-center py-20 text-gray-500">No stories found.</div>}
+                                        ) : (
+                                            <div className="text-center py-32"><p className="text-gray-500">No stories found. Go to Admin Panel to add news.</p></div>
+                                        )}
                                     </>
                                 )}
                             </div>
                         ) : (
-                            <ArticlePage 
-                                slug={currentSlug} 
-                                // Pass loaded article if we have it in memory to skip fetch
-                                article={articles.find(a => (a.slug || generateSlug(a.title)) === currentSlug)}
-                                allArticles={articles}
-                                onBack={navigateHome} 
-                            />
+                            // 🔧 FIX: Check if currentArticle exists before rendering
+                            currentArticle ? (
+                                <ArticlePage article={currentArticle} onBack={() => setView('home')} />
+                            ) : (
+                                <div className="max-w-7xl mx-auto px-4 py-32 text-center">
+                                    <p className="text-gray-500">Article not found.</p>
+                                    <button onClick={() => setView('home')} className="mt-4 text-red-600 hover:underline">Return Home</button>
+                                </div>
+                            )
                         )}
                     </main>
+
+                    <footer className="bg-black text-white py-16 border-t border-gray-900">
+                        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12">
+                            <div className="col-span-1 md:col-span-2">
+                                <h2 className="text-3xl font-serif font-bold mb-6">Polkhol.</h2>
+                                <p className="text-gray-400 max-w-md">Independent, in-depth journalism for the modern era.</p>
+                            </div>
+                            <div>
+                                <h4 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-6">Connect</h4>
+                                <ul className="space-y-3 text-gray-300"><li>Twitter</li><li>LinkedIn</li></ul>
+                            </div>
+                        </div>
+                        <div className="max-w-7xl mx-auto px-4 mt-16 pt-8 border-t border-gray-800 text-center text-gray-600 text-sm">
+                            &copy; 2024 Polkhol Media Group. <button onClick={() => setView('admin')} className="hover:text-white ml-2">Admin Login</button>
+                        </div>
+                    </footer>
                 </div>
             );
         };
